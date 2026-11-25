@@ -1,0 +1,41 @@
+name: Generate outreach CSV
+
+on:
+  workflow_dispatch:
+    inputs:
+      company_name:
+        description: Company name
+        required: true
+        type: string
+      website:
+        description: Company website (include https://)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate CSV
+        env:
+          COMPANY_NAME: ${{ inputs.company_name }}
+          WEBSITE: ${{ inputs.website }}
+        run: python app/main.py
+
+      - name: Upload CSV artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: outreach-csv
+          path: output/outreach_contacts.csv
+          retention-days: 7
