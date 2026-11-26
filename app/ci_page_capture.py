@@ -17,9 +17,6 @@ def validate_url(url: str) -> None:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.hostname:
         raise ValueError("Provide a valid http:// or https:// URL.")
-    host = parsed.hostname.lower()
-    if host == "linkedin.com" or host.endswith(".linkedin.com"):
-        raise ValueError("LinkedIn automated page capture is not supported.")
 
 
 def capture(url: str, output_dir: str = "capture_output") -> Path:
